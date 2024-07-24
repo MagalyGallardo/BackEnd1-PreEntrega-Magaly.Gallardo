@@ -1,0 +1,12 @@
+[
+  {
+    "id": "016a75c1-0563-42ac-9c26-59e076a2b825",
+    "title": "Nuevo Producto",
+    "description": "Descripción del producto",
+    "price": 100,
+    "img": "ruta/imagen.jpg",
+    "code": "ABC123",
+    "stock": 50,
+    "category": "Categoría"
+  }
+]
