@@ -1,36 +1,39 @@
-import {Router} from 'express';
-import { cartManager } from '../app.js';
+import {Router} from "express";
+import {cartManager} from "../app.js";
 
-const cartsRouter = Router();
-
-cartsRouter.post('/', async (req, res)=>{
+const cartRouter = Router();
+cartRouter.post("/", async (req,res)=>{
     try{
-        const response = await cartManager.newCart()
+        const response = await cartManager.addCart();
         res.json(response)
-    } catch (error){
-        res.send('Error al crear carrito')
+    }catch (error){
+        res.send("Error al crear producto")
+        console.log(error);
     }
-} )
 
-cartsRouter.get('/:cid', async (req, res) => {
-    const { cid } = req.params;
-    try {
-        const response = await cartManager.getCartProducts(cid);
-        res.json(response);
-    } catch (error) {
-        res.send('Error al enviar productos al carrito');
-    }
-});
-
-
-cartsRouter.post('/:cid/products/:pid', async (req, res)=>{
-    const {cid, pid} = req.params;
-    try {
-        await cartManager.addProductToCart(cid, pid)
-        res.send('Agregado!')
-    } catch (error){
-        res.send('Error al guardar producto en el carrito')
+})
+cartRouter.get("/:cid", async (req, res) => {
+    let cid = req.params.cid;
+    try{
+        const cart = await cartManager.getCartById(cid)
+        res.json(cart.products)
+    }catch(error){
+        res.send("Error al obtener producto")
     }
 })
+cartRouter.post("/:cid/product/:pid", async (req,res) => {
+    let cid=req.params.cid;
+    let pid=req.params.pid;
+    let quantity=req.body.quantity || 1;
 
-export {cartsRouter}
+    try{
+        const actualizado = await cartManager.addProductsToCart(cid,pid,quantity)
+        res.json(actualizado.products)
+    }catch(error){
+        res.send("Error al actualizar")
+        console.log(error);
+    }
+
+})
+
+export {cartRouter};
